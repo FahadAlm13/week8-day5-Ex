@@ -40,4 +40,9 @@ public class CourseController {
     public ResponseEntity getTeacherName(@PathVariable Integer id) {
         return ResponseEntity.status(200).body(courseService.getTeacherName(id));
     }
+    @PutMapping("/assignCourseToTeacher/{id}/{teacherId}")
+    public ResponseEntity assignCourseToTeacher(@PathVariable Integer id, @PathVariable Integer teacherId) {
+        courseService.assignTeacher(id, teacherId);
+        return ResponseEntity.status(200).body("The course is assigned successfully to the teacher");
+    }
 }

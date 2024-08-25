@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import spring.boot.week8day4relationex.API.ApiException;
 import spring.boot.week8day4relationex.Model.Course;
+import spring.boot.week8day4relationex.Model.Teacher;
 import spring.boot.week8day4relationex.Repository.CourseRepository;
+import spring.boot.week8day4relationex.Repository.TeacherRepository;
 
 import java.util.List;
 
@@ -12,6 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CourseService {
     private final CourseRepository courseRepository;
+    private final TeacherRepository teacherRepository;
 
     public List<Course> getAllCourses() {
         return courseRepository.findAll();
@@ -47,5 +50,19 @@ public class CourseService {
             throw new ApiException("Teacher not found in this course");
         }
         return course.getTeacher().getName();
+    }
+
+    public void assignTeacher(Integer id, Integer teacherId) {
+        Course course = courseRepository.findCourseById(id);
+        if (course == null) {
+            throw new ApiException("The course is not found");
+        }
+        Teacher teacher = teacherRepository.findTeacherById(teacherId);
+        if (teacher == null) {
+            throw new ApiException("The teacher is not found");
+        }
+        course.setTeacher(teacher);
+
+        courseRepository.save(course);
     }
 }
